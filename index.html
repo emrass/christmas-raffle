@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas Gift Raffle</title>
+    <title>Weihnachts-Wichteln</title>
     <!-- 1. Include Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 2. Include the MD5 hashing library (with cache-busting query) -->
@@ -26,28 +26,28 @@
             </div>
 
             <h1 class="text-3xl font-bold text-center text-red-700 mb-4">
-                Christmas Gift Raffle
+                Weihnachts-Wichteln
             </h1>
             
             <p class="text-center text-gray-600 mb-6">
-                Enter your first name to find out who you'll be giving a gift to this Christmas!
+                Gib deinen Vornamen ein, um zu sehen, wen du dieses Weihnachten beschenkst!
             </p>
 
             <!-- Input Form -->
             <div class="space-y-4">
                 <div>
-                    <label for="nameInput" class="block text-sm font-medium text-gray-700 sr-only">Your Name</label>
-                    <input type="text" id="nameInput" placeholder="Enter your first name" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                    <label for="nameInput" class="block text-sm font-medium text-gray-700 sr-only">Dein Name</label>
+                    <input type="text" id="nameInput" placeholder="Gib deinen Vornamen ein" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition">
                 </div>
                 
                 <button id="drawButton" class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold shadow-md hover:bg-green-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                    Draw Your Person!
+                    Namen ziehen!
                 </button>
             </div>
 
             <!-- Result Display Area -->
             <div id="resultDisplay" class="mt-8 text-center text-xl font-semibold h-20 flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <span class="text-gray-500">Your assigned person will appear here...</span>
+                <span class="text-gray-500">Dein Wichtel-Partner wird hier erscheinen...</span>
             </div>
 
         </div>
@@ -78,7 +78,7 @@
             const inputName = nameInput.value.trim().toLowerCase();
             
             if (inputName === '') {
-                resultDisplay.innerHTML = '<span class="text-red-600">Please enter a name!</span>';
+                resultDisplay.innerHTML = '<span class="text-red-600">Bitte gib einen Namen ein!</span>';
                 return;
             }
 
@@ -87,11 +87,11 @@
 
             if (assignedPerson) {
                 resultDisplay.innerHTML = `
-                    <span class="text-gray-700">You are giving a gift to...</span>
+                    <span class="text-gray-700">Du beschenkst...</span>
                     <strong class="block text-3xl text-green-700 mt-1">${assignedPerson}</strong>
                 `;
             } else {
-                resultDisplay.innerHTML = '<span class="text-red-600">Name not found. Please check the spelling and try again!</span>';
+                resultDisplay.innerHTML = '<span class="text-red-600">Name nicht gefunden. Bitte prüfe die Schreibweise!</span>';
             }
         }
 
