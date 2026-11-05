@@ -25,10 +25,8 @@ When reshuffling or drawing a new gift assignment for a new year, the following 
    - Every participant gives exactly one present.
    - Every participant receives exactly one present.
    - The set of givers and the set of receivers must both match the full family member list.
-3. **Exclusion Rule (Enrico & Nadine)**:
-   - **Enrico must never be assigned to Nadine** ($Enrico \not\to Nadine$).
-   - **Nadine must never be assigned to Enrico** ($Nadine \not\to Enrico$).
-   - All other pairings are allowed.
+3. **No Partner / Couple Exclusions**:
+   - There are no partner or couple exclusions; any person can draw any other person in the pool.
 4. **Any Valid Derangement Allowed**:
    - Mutual 2-person swaps (e.g. $A \to B$ and $B \to A$) as well as larger cycles (e.g. 3-cycles, 5-cycles) are completely acceptable.
 5. **Year-over-Year History**:
@@ -76,7 +74,6 @@ When a user asks to reshuffle or draw new Christmas raffle assignments, perform 
 2. **Generate a Random Valid Draw**:
    - Generate a random permutation of the 5 recipients where:
      - No one is assigned to themselves.
-     - Enrico is not assigned to Nadine ($Enrico \not\to Nadine$) and Nadine is not assigned to Enrico ($Nadine \not\to Enrico$).
      - The draw is not 100% identical to the current `giftAssignments`.
 3. **Format and Update `index.html`**:
    - Update the `giftAssignments` object in `index.html`.
@@ -86,7 +83,6 @@ When a user asks to reshuffle or draw new Christmas raffle assignments, perform 
    - Confirm all 5 MD5 hashes match the members' lowercase names.
    - Confirm all 5 recipients are unique and cover the 5 members.
    - Confirm no one is assigned to themselves.
-   - Confirm neither Enrico nor Nadine are assigned to each other.
 5. **Commit the Changes**:
    - Stage and commit `index.html` with a clean, discreet commit message such as:
      `Update Christmas raffle assignments for the new year`
