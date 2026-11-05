@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Disable browser caching to ensure visitors always load the latest assignments -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Weihnachts-Wichteln</title>
     <!-- 1. Include Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -60,11 +64,11 @@
         // The gift assignments (MD5 hashes of lowercase names as keys).
         // The assignment has been reshuffled and ensures no one draws themselves.
         const giftAssignments = {
-            '083d2182dc8fdf0834b112256802ae2a': 'Enrico',
-            '3a23bb515e06d0e944ff916e79a7775c': 'Sarah',
-            '5b1b4dee9103f759fdb57197a78780a6': 'Ricci',
-            '8f5c853566391602f1a56b305e1d9cd5': 'Diana',
-            '9e9d7a08e048e9d604b79460b54969c3': 'Nadine'
+            '083d2182dc8fdf0834b112256802ae2a': 'Nadine',
+            '3a23bb515e06d0e944ff916e79a7775c': 'Ricci',
+            '5b1b4dee9103f759fdb57197a78780a6': 'Diana',
+            '8f5c853566391602f1a56b305e1d9cd5': 'Sarah',
+            '9e9d7a08e048e9d604b79460b54969c3': 'Enrico'
         };
 
         // --- Page Logic ---
