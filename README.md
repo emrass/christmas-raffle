@@ -39,6 +39,9 @@ When reshuffling or drawing a new gift assignment for a new year, the following 
      - No plaintext pairings in terminal stdout/logs.
      - No plaintext pairings in AI agent chat responses to the user.
    - In code, givers must only exist as the MD5 hash of their lowercase first name.
+7. **Rotate Badge Icon for Cache Confirmation**:
+   - With every reshuffle, a **different Christmas-themed icon** must be chosen for the badge in `index.html` (e.g. 🎁, 🎄, 🎅, ⛄, 🦌, 🔔, 🕯️, 🛷, 🍪).
+   - This provides instant visual confirmation to participants that they are seeing the latest deployment rather than a cached version.
 
 ---
 
@@ -78,6 +81,7 @@ When a user asks to reshuffle or draw new Christmas raffle assignments, perform 
 3. **Format and Update `index.html`**:
    - Update the `giftAssignments` object in `index.html`.
    - Sort the dictionary keys alphabetically by MD5 hash so the order in the file does not reveal the draw order.
+   - **Rotate the badge icon** in `#treeBadge` to a different festive holiday emoji (e.g. ⛄, 🎅, 🎄, 🎁, 🦌, 🔔, 🕯️) so users can confirm the latest deployment.
 4. **Validate**:
    - Confirm there are exactly 5 entries.
    - Confirm all 5 MD5 hashes match the members' lowercase names.
