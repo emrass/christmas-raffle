@@ -13,46 +13,140 @@
     <!-- 2. Include the MD5 hashing library (with cache-busting query) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js?v=2"></script>
     <style>
-        /* Optional: Add a festive background color */
+        /* Deep cozy holiday winter background */
         body {
-            background-color: #fcf0f0; /* A very light, festive red */
+            background: radial-gradient(circle at 50% 15%, #184232 0%, #0d281e 50%, #061610 100%);
+            min-height: 100vh;
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+
+        /* Snow canvas */
+        #snowCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Unwrap reveal animation */
+        @keyframes giftUnwrap {
+            0% {
+                transform: scale(0.8) rotate(-3deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.05) rotate(1deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .animate-unwrap {
+            animation: giftUnwrap 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Tree pulse and sparkle */
+        @keyframes treeWiggle {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-8deg) scale(1.1); }
+            75% { transform: rotate(8deg) scale(1.1); }
+        }
+
+        .tree-wiggle {
+            animation: treeWiggle 0.5s ease-in-out;
+        }
+
+        /* Floating spark particles */
+        .sparkle-particle {
+            position: absolute;
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5);
+            }
         }
     </style>
 </head>
-<body class="font-sans antialiased text-gray-800">
+<body class="font-sans antialiased relative flex flex-col justify-between min-h-screen">
 
-    <div class="container mx-auto flex items-center justify-center min-h-screen px-4">
+    <!-- Background Snow Layer -->
+    <canvas id="snowCanvas"></canvas>
 
-        <div class="relative w-full max-w-md p-8 bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <!-- Festive decoration -->
-            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-20 h-20 rounded-full bg-red-600 flex items-center justify-center text-4xl shadow-lg">
-                🎄
+    <!-- Main Content Container -->
+    <div class="relative z-10 container mx-auto flex items-center justify-center min-h-screen px-4 py-8">
+
+        <div class="relative w-full max-w-md p-8 bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6)] border border-emerald-100/60 overflow-hidden transition-all duration-300">
+            
+            <!-- Festive decorative top garland bar -->
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-600 via-amber-400 to-emerald-600"></div>
+
+            <!-- Festive decoration button / Easter egg trigger -->
+            <button id="treeBadge" type="button" title="Klick mich für einen Schneesturm! ❄️" aria-label="Weihnachtsbaum Schneesturm"
+                class="group absolute top-0 right-0 -mt-3 -mr-3 w-20 h-20 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center text-4xl shadow-xl hover:shadow-red-500/50 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-4 focus:ring-amber-300/60">
+                <span id="treeIcon" class="transform transition-transform group-hover:rotate-12 select-none">🎄</span>
+            </button>
+
+            <!-- Blizzard Notification Toast -->
+            <div id="blizzardToast" class="hidden absolute top-4 left-1/2 -translate-x-1/2 bg-sky-900/90 text-sky-100 text-xs font-bold px-3 py-1.5 rounded-full shadow-lg border border-sky-300/40 pointer-events-none transition-all">
+                🌨️ Schneesturm aktiv! ❄️
             </div>
 
-            <h1 class="text-3xl font-bold text-center text-red-700 mb-4">
-                Weihnachts-Wichteln
-            </h1>
-            
-            <p class="text-center text-gray-600 mb-6">
-                Gib deinen Vornamen ein, um zu sehen, wen du dieses Weihnachten beschenkst!
-            </p>
+            <div class="text-center mt-2 mb-6">
+                <span class="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-100/80 rounded-full mb-3 border border-emerald-200">
+                    ✨ Besinnliche Wichtelrunde ✨
+                </span>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-700 via-red-800 to-emerald-800">
+                    Weihnachts-Wichteln
+                </h1>
+                <p class="text-sm text-gray-600 mt-2">
+                    Gib deinen Vornamen ein, um dein geheimes Wichtel-Los zu ziehen!
+                </p>
+            </div>
 
             <!-- Input Form -->
             <div class="space-y-4">
                 <div>
                     <label for="nameInput" class="block text-sm font-medium text-gray-700 sr-only">Dein Name</label>
-                    <input type="text" id="nameInput" placeholder="Gib deinen Vornamen ein" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 transition">
+                    <div class="relative">
+                        <input type="text" id="nameInput" placeholder="Gib deinen Vornamen ein" autocomplete="off"
+                            class="w-full pl-4 pr-10 py-3.5 border-2 border-gray-200 rounded-xl shadow-inner focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/20 text-gray-800 placeholder-gray-400 font-medium transition duration-200">
+                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none select-none text-lg">
+                            🎁
+                        </span>
+                    </div>
                 </div>
                 
-                <button id="drawButton" class="w-full bg-green-600 text-white p-3 rounded-lg font-semibold shadow-md hover:bg-green-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                    Namen ziehen!
+                <button id="drawButton"
+                    class="w-full bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 text-white py-3.5 px-4 rounded-xl font-bold shadow-lg shadow-emerald-700/30 hover:shadow-emerald-600/50 hover:from-emerald-500 hover:to-green-600 active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-emerald-500/30 flex items-center justify-center gap-2">
+                    <span>Namen ziehen!</span>
+                    <span class="text-xl">✨</span>
                 </button>
             </div>
 
             <!-- Result Display Area -->
-            <div id="resultDisplay" class="mt-8 text-center text-xl font-semibold h-20 flex items-center justify-center p-4 bg-gray-50 rounded-lg">
-                <span class="text-gray-500">Dein Wichtel-Partner wird hier erscheinen...</span>
+            <div id="resultDisplay" class="relative mt-7 text-center min-h-[96px] flex flex-col items-center justify-center p-4 bg-gradient-to-b from-gray-50 to-emerald-50/40 rounded-2xl border border-gray-200/70 shadow-inner overflow-hidden transition-all">
+                <span class="text-gray-500 text-sm font-medium flex items-center gap-1.5">
+                    <span>🌟</span> Dein Wichtel-Partner wird hier erscheinen...
+                </span>
             </div>
+
+            <p class="text-[11px] text-center text-gray-400 mt-6 select-none">
+                Frohe Festtage &amp; viel Spaß beim Schenken! 🕯️
+            </p>
 
         </div>
 
@@ -71,31 +165,149 @@
             '9e9d7a08e048e9d604b79460b54969c3': 'Diana'
         };
 
+        // --- Easter Eggs for Festive Names ---
+        const easterEggs = {
+            'grinch': {
+                tag: 'Oh je, der Grinch!',
+                text: 'Du kriegst dieses Jahr ein Stück Kohle! 🪨',
+                accent: 'text-amber-800'
+            },
+            'santa': {
+                tag: 'Ho Ho Ho!',
+                text: 'Du beschenkst die ganze Welt! 🎅🎁✨',
+                accent: 'text-red-600'
+            },
+            'weihnachtsmann': {
+                tag: 'Ho Ho Ho!',
+                text: 'Du beschenkst die ganze Welt! 🎅🎁✨',
+                accent: 'text-red-600'
+            },
+            'nikolaus': {
+                tag: 'Schönen Nikolaustag!',
+                text: 'Vergiss nicht, deine Stiefel zu putzen! 🥾🍎🥜',
+                accent: 'text-red-600'
+            },
+            'rudolph': {
+                tag: 'Hallo Rudolph!',
+                text: 'Deine Nase leuchtet den Weg durch den Schnee! 🦌🔴✨',
+                accent: 'text-amber-700'
+            },
+            'christkind': {
+                tag: 'Himmlische Grüße!',
+                text: 'Frohe & gesegnete Weihnachten euch allen! 👼🌟',
+                accent: 'text-yellow-700'
+            }
+        };
+
+        // --- Pure Web Audio API Holiday Chime ---
+        function playHolidayChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
+
+                // Festive Glockenspiel Chord: C6 (1046.5), E6 (1318.5), G6 (1567.98), C7 (2093.0)
+                const notes = [1046.5, 1318.5, 1567.98, 2093.0];
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.09);
+
+                    // Bell envelope: instant attack, gentle decay
+                    const start = ctx.currentTime + idx * 0.09;
+                    gain.gain.setValueAtTime(0, start);
+                    gain.gain.linearRampToValueAtTime(0.18, start + 0.015);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.7);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+
+                    osc.start(start);
+                    osc.stop(start + 0.75);
+                });
+            } catch (e) {
+                // Audio unavailable or blocked - fail silently
+            }
+        }
+
+        // --- Sparkle Burst Animation ---
+        function burstSparkles(targetElement) {
+            const rect = targetElement.getBoundingClientRect();
+            const symbols = ['✨', '⭐', '❄️', '🌟', '🎄'];
+            for (let i = 0; i < 8; i++) {
+                const span = document.createElement('span');
+                span.className = 'sparkle-particle';
+                span.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                span.style.left = (rect.width / 2 + (Math.random() * 40 - 20)) + 'px';
+                span.style.top = (rect.height / 2 + (Math.random() * 30 - 15)) + 'px';
+                const tx = (Math.random() - 0.5) * 120 + 'px';
+                const ty = -(Math.random() * 60 + 20) + 'px';
+                span.style.setProperty('--tx', tx);
+                span.style.setProperty('--ty', ty);
+                span.style.fontSize = (Math.random() * 8 + 14) + 'px';
+                targetElement.appendChild(span);
+                setTimeout(() => span.remove(), 800);
+            }
+        }
+
         // --- Page Logic ---
 
         const drawButton = document.getElementById('drawButton');
         const nameInput = document.getElementById('nameInput');
         const resultDisplay = document.getElementById('resultDisplay');
+        const treeBadge = document.getElementById('treeBadge');
+        const treeIcon = document.getElementById('treeIcon');
+        const blizzardToast = document.getElementById('blizzardToast');
 
         // Function to handle the name drawing
         function drawName() {
             const inputName = nameInput.value.trim().toLowerCase();
             
             if (inputName === '') {
-                resultDisplay.innerHTML = '<span class="text-red-600">Bitte gib einen Namen ein!</span>';
+                resultDisplay.innerHTML = '<span class="text-red-600 font-semibold text-sm">Bitte gib deinen Namen ein!</span>';
+                resultDisplay.classList.remove('animate-unwrap');
                 return;
             }
 
+            // Check Easter Eggs first
+            if (easterEggs[inputName]) {
+                const egg = easterEggs[inputName];
+                resultDisplay.innerHTML = `
+                    <div class="animate-unwrap space-y-1">
+                        <span class="inline-block px-2.5 py-0.5 text-xs font-bold rounded-full bg-amber-100 text-amber-800">
+                            ${egg.tag}
+                        </span>
+                        <strong class="block text-lg sm:text-xl ${egg.accent}">${egg.text}</strong>
+                    </div>
+                `;
+                playHolidayChime();
+                burstSparkles(resultDisplay);
+                return;
+            }
+
+            // Regular draw with hash check
             const nameHash = md5(inputName);
             const assignedPerson = giftAssignments[nameHash];
 
             if (assignedPerson) {
                 resultDisplay.innerHTML = `
-                    <span class="text-gray-700">Du beschenkst...</span>
-                    <strong class="block text-3xl text-green-700 mt-1">${assignedPerson}</strong>
+                    <div class="animate-unwrap space-y-0.5">
+                        <span class="text-xs uppercase tracking-wider font-semibold text-gray-500">Du beschenkst dieses Jahr:</span>
+                        <strong class="block text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-700 to-green-600 py-1">
+                            ${assignedPerson}
+                        </strong>
+                        <span class="block text-xs text-emerald-700/80 font-medium">🎁 Psst... Behalte es für dich!</span>
+                    </div>
                 `;
+                playHolidayChime();
+                burstSparkles(resultDisplay);
             } else {
-                resultDisplay.innerHTML = '<span class="text-red-600">Name nicht gefunden. Bitte prüfe die Schreibweise!</span>';
+                resultDisplay.innerHTML = '<span class="text-red-600 font-semibold text-sm">Name nicht gefunden. Bitte prüfe die Schreibweise!</span>';
+                resultDisplay.classList.remove('animate-unwrap');
             }
         }
 
@@ -108,6 +320,88 @@
                 drawName();
             }
         });
+
+        // --- Blizzard Mode Easter Egg on Tree Badge Click ---
+        let isBlizzard = false;
+        let blizzardTimeout = null;
+
+        treeBadge.addEventListener('click', function() {
+            treeIcon.classList.remove('tree-wiggle');
+            void treeIcon.offsetWidth; // re-trigger animation
+            treeIcon.classList.add('tree-wiggle');
+            burstSparkles(treeBadge);
+            playHolidayChime();
+
+            isBlizzard = true;
+            blizzardToast.classList.remove('hidden');
+
+            clearTimeout(blizzardTimeout);
+            blizzardTimeout = setTimeout(() => {
+                isBlizzard = false;
+                blizzardToast.classList.add('hidden');
+            }, 3500);
+        });
+
+        // --- Lightweight HTML5 Canvas Snow Engine ---
+        (function initSnow() {
+            const canvas = document.getElementById('snowCanvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const flakeCount = Math.min(65, Math.floor(width / 18));
+            const flakes = [];
+
+            for (let i = 0; i < flakeCount; i++) {
+                flakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 2.8 + 1.2,
+                    speed: Math.random() * 0.9 + 0.6,
+                    drift: (Math.random() - 0.5) * 0.5,
+                    opacity: Math.random() * 0.6 + 0.4
+                });
+            }
+
+            function render() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+
+                const speedMultiplier = isBlizzard ? 4.5 : 1.0;
+                const windBonus = isBlizzard ? 1.8 : 0;
+
+                for (let i = 0; i < flakes.length; i++) {
+                    const f = flakes[i];
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${f.opacity})`;
+                    ctx.fill();
+
+                    f.y += f.speed * speedMultiplier;
+                    f.x += (f.drift + windBonus) * (isBlizzard ? 1.5 : 1.0);
+
+                    // Wrap around
+                    if (f.y > height) {
+                        f.y = -10;
+                        f.x = Math.random() * width;
+                    }
+                    if (f.x > width) {
+                        f.x = -10;
+                    } else if (f.x < -10) {
+                        f.x = width;
+                    }
+                }
+
+                requestAnimationFrame(render);
+            }
+
+            requestAnimationFrame(render);
+        })();
     </script>
 
 </body>
